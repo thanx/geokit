@@ -22,6 +22,7 @@ end
 
 path = File.expand_path(File.dirname(__FILE__))
 $:.unshift path unless $:.include?(path)
+require 'geokit/utils'
 require 'geokit/core_ext'
 require 'geokit/geocoders'
 require 'geokit/mappable'
