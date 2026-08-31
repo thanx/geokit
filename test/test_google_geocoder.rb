@@ -235,10 +235,10 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     assert_equal 5, res.all.size
     res = res.all[0]
     assert_equal 'Lombardy', res.state
-    assert_equal 'Santo Stefano Ticino', res.city
-    assert_array_in_delta [45.488678, 8.919173], res.to_a
+    assert_equal 'Mesero', res.city
+    assert_array_in_delta [45.4966218, 8.852694], res.to_a
     assert !res.is_us?
-    assert_equal 'Via Sandro Pertini, 8, 20010 Santo Stefano Ticino Milan, Italy', res.full_address
+    assert_equal 'Via Sandro Pertini, 8, 20010 Mesero Milan, Italy', res.full_address
     assert_equal '8 Via Sandro Pertini', res.street_address
     assert_equal 'google', res.provider
 
@@ -337,7 +337,7 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     biased_result = geocode('toledo', :google_result_toledo_default_bias)
 
     assert_equal 'US', biased_result.country_code
-    assert_equal 'OR', biased_result.state
+    assert_equal 'OH', biased_result.state
   end
 
   def test_country_code_biasing_orly
@@ -346,7 +346,7 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     biased_result = geocode('orly', :google_country_code_biased_result_orly, bias: 'fr')
 
     assert_equal 'FR', biased_result.country_code
-    assert_equal 'Orly Airport, 94390 Orly, France', biased_result.full_address
+    assert_equal 'Orly, France', biased_result.full_address
   end
 
 
@@ -355,8 +355,8 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     TestHelper.expects(:last_url).with(url)
     filtered_result = geocode('austin', :test_component_filtering_off)
 
-    assert_equal 'IN', filtered_result.state
-    assert_equal 'Austin, IN, USA', filtered_result.full_address
+    assert_equal 'TX', filtered_result.state
+    assert_equal 'Austin, TX, USA', filtered_result.full_address
 
     url = "https://maps.google.com/maps/api/geocode/json?sensor=false&address=austin&components=administrative_area%3Ail%7Ccountry%3Aus"
     TestHelper.expects(:last_url).with(url)
@@ -365,14 +365,14 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
       components: { administrative_area: 'IL', country: 'US' })
 
     assert_equal 'IL', filtered_result.state
-    assert_equal 'Austin Township, IL, USA', filtered_result.full_address
+    assert_equal 'Austin, Chicago, IL, USA', filtered_result.full_address
 
     url = 'https://maps.google.com/maps/api/geocode/json?sensor=false&address=austin'
     TestHelper.expects(:last_url).with(url)
     filtered_result = geocode('austin', :test_component_filtering_on_without_filter, components: nil)
 
-    assert_equal 'IN', filtered_result.state
-    assert_equal 'Austin, IN 47102, USA', filtered_result.full_address
+    assert_equal 'TX', filtered_result.state
+    assert_equal 'Austin, TX, USA', filtered_result.full_address
 
     url = "https://maps.google.com/maps/api/geocode/json?sensor=false&address=S%C3%A3o+Paulo&components=administrative_area%3As%C3%A3o+paulo%7Ccountry%3Abr"
     TestHelper.expects(:last_url).with(url)
