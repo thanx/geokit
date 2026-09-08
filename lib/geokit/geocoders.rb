@@ -15,7 +15,6 @@ module Geokit
   #
   # ### "regular" address geocoders
   # * Yahoo Geocoder - requires an API key.
-  # * Geocoder.us - may require authentication if performing more than the free request limit.
   # * Geocoder.ca - for Canada; may require authentication as well.
   # * Geonames - a free geocoder
   #
@@ -35,7 +34,7 @@ module Geokit
     @@proxy = nil
     @@useragent = nil
     @@request_timeout = nil
-    @@provider_order = [:google, :us]
+    @@provider_order = [:google]
     @@ip_provider_order = [:geo_plugin, :ip]
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::INFO
@@ -75,6 +74,7 @@ module Geokit
     class GeocodeError < StandardError; end
     class TooManyQueriesError < StandardError; end
     class AccessDeniedError < StandardError; end
+    class NoSuchGeocoderError < StandardError; end
 
     # -------------------------------------------------------------------------------------------
     # Geocoder Base class -- every geocoder should inherit from this
@@ -89,7 +89,8 @@ module Geokit
       def self.geocode(address, *args)
         logger.debug "#{provider_name} geocoding. address: #{address}, args #{args}"
         do_geocode(address, *args) || GeoLoc.new
-      rescue TooManyQueriesError, GeocodeError, AccessDeniedError
+      rescue TooManyQueriesError, GeocodeError, AccessDeniedError, NoSuchGeocoderError
+        # puts "Exception raised by provider: #{provider_name}"
         raise
       rescue => e
         logger.error "Caught an error during #{provider_name} geocoding call: #{$!}"

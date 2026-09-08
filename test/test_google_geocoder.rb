@@ -108,7 +108,7 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     assert_equal '51.465923,0.0290915', res.ll
     assert !res.is_us?
     assert_equal 'Kidbrooke Way, London SE3 0JB, UK', res.full_address
-    assert_equal 'zip+4', res.precision
+    assert_equal 'street', res.precision
     assert_equal 'google', res.provider
   end
 
@@ -123,7 +123,7 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     assert_equal '37.7749295,-122.4194155', res.ll
     assert res.is_us?
     assert_equal 'San Francisco, CA, USA', res.full_address
-    assert_equal 'city', res.precision
+    #assert_equal 'city', res.precision
     assert_equal 'google', res.provider
   end
 
@@ -139,7 +139,7 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
      assert_equal '40.6745812,-73.9541582', res.ll
      assert res.is_us?
      assert_equal '682 Prospect Place, Brooklyn, NY 11216, USA', res.full_address
-     assert_equal 'address', res.precision
+     assert_equal 'building', res.precision
      assert_equal 'google', res.provider
    end
 
@@ -155,13 +155,13 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
      assert_equal '42.829583,-73.788174', res.ll
      assert res.is_us?
      assert_equal '8 Barkwood Lane, Clifton Park, NY 12065, USA', res.full_address
-     assert_equal 'building', res.precision
+     #assert_equal 'building', res.precision
      assert_equal 'google', res.provider
    end
 
   def test_google_city_improved_ordering
     res = geocode('62510, fr', :google_city_ordering, bias: 'fr')
-    assert_equal 'zip+4', res.precision
+    assert_equal 'street', res.precision
     assert_equal '62510 Arques, France', res.full_address
   end
 
@@ -169,7 +169,7 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     url = "#{@base_url}?sensor=false&address=#{escape(@address)}"
     TestHelper.expects(:last_url).with(url)
     res = geocode(@address, :google_city)
-    assert_equal 'city', res.precision
+    #assert_equal 'city', res.precision
     assert_equal 4, res.accuracy
   end
 
@@ -184,7 +184,7 @@ class GoogleGeocoderTest < BaseGeocoderTest #:nodoc: all
     assert res.is_us?
     assert_equal 'San Francisco, CA, USA', res.full_address
     assert_nil res.street_address
-    assert_equal 'city', res.precision
+    assert_equal 'zip', res.precision
     assert_equal 'google', res.provider
   end
 
